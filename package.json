@@ -18,7 +18,7 @@
     "purescript-rxjs"
   ],
   "author": "Luka Jacobowitz",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/jasonzoladz/purescript-rxjs/issues"
   },
