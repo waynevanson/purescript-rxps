@@ -1,4 +1,4 @@
-# purescript-rxjs
+# purescript-rxps
 An opinionated PureScript wrapper for RxJS, complete with a Monad Transformer `ObservableT`
 
 
