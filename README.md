@@ -11,4 +11,4 @@ bower install purescript-rx-observable
 
 ### Documentation
 
-- See the `docs` folder.
+- Module documentation is [published on Pursuit](http://pursuit.purescript.org/packages/purescript-rx-observable).
