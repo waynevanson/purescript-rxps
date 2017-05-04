@@ -29,6 +29,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jasonzoladz/purescript-rxjs.git"
+    "url": "git://github.com/LukaJCB/purescript-rx-observable.git"
   }
 }
