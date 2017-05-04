@@ -1,5 +1,5 @@
 {
-  "name": "purescript-rx-observable",
+  "name": "purescript-rxps",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -29,6 +29,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/LukaJCB/purescript-rx-observable.git"
+    "url": "git://github.com/LukaJCB/purescript-rxps.git"
   }
 }

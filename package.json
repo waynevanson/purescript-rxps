@@ -1,6 +1,6 @@
 {
-  "name": "purescript-rx-observable",
-  "version": "1.1.1",
+  "name": "purescript-rxps",
+  "version": "1.1.3",
   "description": "An un-opinionated wrapper around Reactive Extensions for JavaScript (v5.*).",
   "main": "index.js",
   "directories": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LukaJCB/purescript-rx-observable.git"
+    "url": "git+https://github.com/LukaJCB/purescript-rxps.git"
   },
   "keywords": [
     "purescript-rxjs"
@@ -20,9 +20,9 @@
   "author": "Luka Jacobowitz",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/LukaJCB/purescript-rx-observable/issues"
+    "url": "https://github.com/LukaJCB/purescript-rxps/issues"
   },
-  "homepage": "https://github.com/LukaJCB/purescript-rx-observable#readme",
+  "homepage": "https://github.com/LukaJCB/purescript-rxps#readme",
   "devDependencies": {
     "purescript": "0.11.4",
     "pulp": "11.0.0"
