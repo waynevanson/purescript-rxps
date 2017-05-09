@@ -1,6 +1,6 @@
 {
   "name": "purescript-rxps",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "An un-opinionated wrapper around Reactive Extensions for JavaScript (v5.*).",
   "main": "index.js",
   "directories": {
