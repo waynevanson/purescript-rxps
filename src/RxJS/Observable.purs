@@ -1,5 +1,5 @@
 module RxJS.Observable
-  ( ObservableT()
+  ( ObservableT(..)
   , Observable
   , ObservableImpl
   , observeOn
