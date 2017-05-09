@@ -1,6 +1,7 @@
 module RxJS.Observable
   ( ObservableT()
   , Observable
+  , ObservableImpl
   , observeOn
   , subscribeOn
   , subscribe

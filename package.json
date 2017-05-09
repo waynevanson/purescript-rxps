@@ -1,14 +1,13 @@
 {
   "name": "purescript-rxps",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "An un-opinionated wrapper around Reactive Extensions for JavaScript (v5.*).",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "start": "node node_modules/.bin/webpack-dev-server --inline --hot" ,
-    "test" : "pulp browserify -I test -m Test.Main -t index.js && node index.js"
+    "test" : "pulp test"
   },
   "repository": {
     "type": "git",
