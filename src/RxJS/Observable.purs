@@ -82,6 +82,7 @@ module RxJS.Observable
   , toArray
   , count
   , reduce
+  , runObservableT
   , Response
   , Request
   )
