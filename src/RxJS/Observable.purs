@@ -630,7 +630,7 @@ startWith a = mapInner (startWith_ a)
 
 -- | Combines each value from the source Observables using a project function to
 -- | determine the value to be emitted on the output
--- | ![marble diagram](https://raw.github.com/wiki/ReactiveX/RxJava/images/rx-operators/withLatestFrom.png" alt="">
+-- | ![marble diagram](https://raw.github.com/wiki/ReactiveX/RxJava/images/rx-operators/withLatestFrom.png)
 withLatestFrom :: forall a b c f. Apply f => (a -> b -> c) -> ObservableT f b -> ObservableT f a -> ObservableT f c
 withLatestFrom selector = combineInner (withLatestFrom_ selector)
 
