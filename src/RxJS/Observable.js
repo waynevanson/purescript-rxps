@@ -61,7 +61,7 @@ exports.ajax_ = function(req) {
   }
 }
 
-exports.ajaxWithBody_ = exports.ajax;
+exports.ajaxWithBody_ = exports.ajax_;
 
 exports._empty_ = Rx.Observable.empty();
 
