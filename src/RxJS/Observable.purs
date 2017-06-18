@@ -114,8 +114,6 @@ import RxJS.Notification (Notification(OnComplete, OnError, OnNext))
 import RxJS.Scheduler (Scheduler)
 import RxJS.Subscriber (Subscriber)
 import RxJS.Subscription (Subscription)
-import Test.QuickCheck (class Arbitrary, arbitrary)
-import Test.QuickCheck.Gen (arrayOf)
 
 foreign import data ObservableImpl :: Type -> Type
 
@@ -156,9 +154,6 @@ instance monadErrorObservableImpl :: MonadError Error ObservableImpl where
 
 instance monadThrowObservableImpl :: MonadThrow Error ObservableImpl where
   throwError = throw_
-
-instance arbitraryObservableImpl :: Arbitrary a => Arbitrary (ObservableImpl a) where
-  arbitrary = fromArray_ <$> (arrayOf arbitrary)
 
 
 foreign import observeOn_ :: forall a. Scheduler -> ObservableImpl a -> ObservableImpl a
