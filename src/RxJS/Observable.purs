@@ -83,6 +83,7 @@ module RxJS.Observable
   , count
   , reduce
   , runObservableT
+  , unwrapEff
   , Response
   , Request
   )
@@ -774,6 +775,8 @@ unwrapInnerFn fn a = unwrapId (fn a)
 unwrapId :: forall a c. Comonad c => ObservableT c a -> ObservableImpl a
 unwrapId = runObservableT >>> extract
 
+unwrapEff :: forall e a. Observable (Eff e a) -> ObservableT (Eff e) a
+unwrapEff = unwrapId >>> unwrap_ >>> ObservableT
 
 
 -- | Collects values from the source ObservableImpl (arg1) as an array. Starts collecting only when
