@@ -33,8 +33,6 @@ observableCreationSpec =
 observableOperatorSpec :: forall e. TestSuite (console :: CONSOLE, testOutput :: TESTOUTPUT, avar :: AVAR | e)
 observableOperatorSpec =
   suite "observable operators" do
-    test "audit" do
-      liftEff ((audit (\x -> observable3) observable) # subObservable)
     test "auditTime" do
       liftEff ((auditTime 200 observable) # subObservable)
     test "bufferCount" do
