@@ -55,7 +55,7 @@ exports.ajax_ = function(req) {
   return function() {
     return Rx.Observable.ajax(req)
       .map(function(res){
-        var body = res.responseText || JSON.stringify(res.response)
+        var body = res.responseText || JSON.stringify(res.response)
         return {body: body, status: res.status, responseType: res.responseType}
       })
   }
