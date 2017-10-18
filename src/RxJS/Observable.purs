@@ -505,7 +505,7 @@ mergeMap ma f = join_ (map f ma)
 
 -- | Maps each value of the ObservableImpl (arg1) to the same inner ObservableImpl (arg2),
 -- | then flattens the result.
--- | ![marble diagram](http://reactivex.io/documentation/operators/images/flatMap.c.png)
+-- | ![marble diagram](http://reactivex.io/documentation/operators/images/flatMap.c.png)
 mergeMapTo :: forall a b m. Apply m => ObservableT m a -> ObservableT m b -> ObservableT m b
 mergeMapTo = combineInner mergeMapTo_
 
@@ -598,7 +598,7 @@ takeUntil = combineInner takeUntil_
 
 -- | Emits values emitted by the source Observable so long as each value satisfies
 -- | the given predicate, and then completes as soon as this predicate is not satisfied.
--- | ![marble diagram](https://raw.githubusercontent.com/wiki/ReactiveX/RxJava/images/rx-operators/takeWhile.png)
+-- | ![marble diagram](https://raw.githubusercontent.com/wiki/ReactiveX/RxJava/images/rx-operators/takeWhile.png)
 takeWhile :: forall a f. Functor f => (a -> Boolean) -> ObservableT f a -> ObservableT f a
 takeWhile predicate = mapInner (takeWhile_ predicate)
 
