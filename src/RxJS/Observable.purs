@@ -30,6 +30,7 @@ module RxJS.Observable
   , pairwise
   , partition
   , scan
+  , scanM
   , switchMap
   , switchMapTo
   , window
@@ -110,7 +111,7 @@ import Data.Monoid (class Monoid)
 import Data.StrMap (StrMap, empty)
 import Data.Tuple (Tuple(..), fst, snd)
 import Partial.Unsafe (unsafePartial)
-import Prelude (class Applicative, class Apply, class Bind, class Functor, class Monad, class Semigroup, id, map, pure, (#), ($), (<$>), (<*>), (<<<), (>>>))
+import Prelude (class Applicative, class Apply, class Bind, class Functor, class Monad, class Semigroup, id, map, pure, (#), ($), (<$>), (<*>), (<<<), (>>=), (>>>))
 import RxJS.Notification (Notification(OnComplete, OnError, OnNext))
 import RxJS.Scheduler (Scheduler)
 import RxJS.Subscriber (Subscriber)
@@ -515,6 +516,9 @@ mergeMapTo = combineInner mergeMapTo_
 scan :: forall a b f. Functor f => (a -> b -> b) -> b -> ObservableT f a -> ObservableT f b
 scan reducer seed = mapInner (scan_ reducer seed)
 
+-- | Same as scan except that its result is encapsulated in a monad.
+scanM :: forall a b m f. Functor f => Monad m => (a -> b -> m b) -> b -> ObservableT f a -> ObservableT f (m b)
+scanM reducer seed = scan (\a mb -> mb >>= reducer a) (pure seed)
 
 -- | It's like delay, but passes only the most recent value from each burst of emissions.
 debounceTime :: forall a f. Functor f => Int -> ObservableT f a -> ObservableT f a
