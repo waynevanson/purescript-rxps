@@ -5,7 +5,7 @@ node_js:
 
 before_script:
   - npm install -g pulp bower purescript
-  - npm install rxjs
+  - npm install rxjs rxjs-compat
   - bower install
 
 script:
