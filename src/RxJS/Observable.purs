@@ -90,28 +90,28 @@ module RxJS.Observable
   )
   where
 
-import Control.Monad.Eff.Uncurried
+import Effect.Uncurried
 import Control.Alt (class Alt)
 import Control.Alternative (class Alternative)
 import Control.Comonad (class Comonad, extract)
-import Control.Monad.Eff (Eff, kind Effect)
-import Control.Monad.Eff.Exception (Error)
-import Control.Monad.Eff.Unsafe (unsafePerformEff)
+import Effect (Effect)
+import Effect.Exception (Error)
+import Effect.Unsafe (unsafePerformEffect)
 import Control.Monad.Error.Class (class MonadThrow, class MonadError)
 import Control.MonadPlus (class MonadPlus)
 import Control.MonadZero (class MonadZero)
 import Control.Plus (class Plus)
-import DOM (DOM)
-import DOM.Event.Types (Event, EventType(..), EventTarget)
+import Web.Event.Event (EventType(..))
+import Web.Event.Internal.Types (Event, EventTarget)
 import Data.Array.Partial (head, last) as Array
 import Data.Foldable (foldr, class Foldable)
 import Data.Function.Uncurried (Fn2, Fn3, Fn4, runFn2, runFn3, runFn4)
 import Data.Identity (Identity)
 import Data.Monoid (class Monoid)
-import Data.StrMap (StrMap, empty)
+import Data.Map (Map, empty)
 import Data.Tuple (Tuple(..), fst, snd)
 import Partial.Unsafe (unsafePartial)
-import Prelude (class Applicative, class Apply, class Bind, class Functor, class Monad, class Semigroup, id, map, pure, (#), ($), (<$>), (<*>), (<<<), (>>=), (>>>))
+import Prelude (class Applicative, class Apply, class Bind, class Functor, class Monad, class Semigroup, identity, map, pure, (#), ($), (<$>), (<*>), (<<<), (>>=), (>>>))
 import RxJS.Notification (Notification(OnComplete, OnError, OnNext))
 import RxJS.Scheduler (Scheduler)
 import RxJS.Subscriber (Subscriber)
@@ -126,7 +126,7 @@ instance functorObservableImpl :: Functor ObservableImpl where
   map = _map_
 
 instance applyObservableImpl :: Apply ObservableImpl where
-  apply = combineLatest_ id
+  apply = combineLatest_ identity
 
 instance applicativeObservableImpl :: Applicative ObservableImpl where
   pure = just_
@@ -164,9 +164,9 @@ foreign import subscribeOn_ :: forall a. Scheduler -> ObservableImpl a -> Observ
 
 -- Subscription
 
-foreign import subscribe_ :: forall a e. Subscriber a -> ObservableImpl a ->  Eff e Subscription
+foreign import subscribe_ :: forall a. Subscriber a -> ObservableImpl a ->  Effect Subscription
 
-foreign import subscribeNext_ :: forall a e u. (a -> Eff e u) -> ObservableImpl a -> Eff e Subscription
+foreign import subscribeNext_ :: forall a u. (a -> Effect u) -> ObservableImpl a -> Effect Subscription
 
 
 -- Creation Operators
@@ -182,7 +182,7 @@ type Request =
   { url :: String
   , body :: String
   , timeout :: Int
-  , headers :: StrMap String
+  , headers :: Map String String
   , crossDomain :: Boolean
   , responseType :: String
   , method :: String
@@ -201,14 +201,14 @@ requestWithBody url body method =
   }
 
 
-foreign import ajax_ :: forall e. String -> Eff e (ObservableImpl Response)
-foreign import ajaxWithBody_ :: forall e. Request -> Eff e (ObservableImpl Response)
+foreign import ajax_ :: String -> Effect (ObservableImpl Response)
+foreign import ajaxWithBody_ :: Request -> Effect (ObservableImpl Response)
 foreign import _empty_ :: forall a. ObservableImpl a
 foreign import fromArray_ :: forall a. Array a -> ObservableImpl a
-foreign import fromEventImpl_ :: forall e. EffFn2 e EventTarget String (ObservableImpl Event)
+foreign import fromEventImpl_ :: EffectFn2 EventTarget String (ObservableImpl Event)
 foreign import interval_ :: Int -> ObservableImpl Int
 foreign import just_ :: forall a. a -> ObservableImpl a
-foreign import create_ :: forall a e u. (Subscriber a -> Eff e u) -> Eff e (ObservableImpl a)
+foreign import create_ :: forall a u. (Subscriber a -> Effect u) -> Effect (ObservableImpl a)
 foreign import never_ :: forall a. ObservableImpl a
 foreign import rangeImpl_ :: Fn2 Int Int (ObservableImpl Int)
 foreign import throw_ :: forall a. Error -> ObservableImpl a
@@ -290,7 +290,7 @@ foreign import share_ :: forall a. ObservableImpl a -> ObservableImpl a
 foreign import first_ :: forall a. (a -> Boolean) -> ObservableImpl a -> ObservableImpl a
 foreign import count_ :: forall a. ObservableImpl a -> ObservableImpl Int
 foreign import reduce_ :: forall a b. (a -> b -> b) -> b -> ObservableImpl a -> ObservableImpl b
-foreign import unwrap_ :: forall a e. ObservableImpl (Eff e a) -> Eff e (ObservableImpl a)
+foreign import unwrap_ :: forall a. ObservableImpl (Effect a) -> Effect (ObservableImpl a)
 
 --- ObservableT
 
@@ -309,7 +309,7 @@ instance functorObservableT :: (Functor f) => Functor (ObservableT f) where
     ObservableT (map (map f) fo)
 
 instance combineInnerervableT :: Apply f => Apply (ObservableT f) where
-  apply = combineLatest id
+  apply = combineLatest identity
 
 instance applicativeObservableT :: Applicative f => Applicative (ObservableT f) where
   pure = just
@@ -399,11 +399,11 @@ throw err = ObservableT (pure (throw_ err))
 just :: forall a f. Applicative f => a -> ObservableT f a
 just a = ObservableT (pure (just_ a))
 
-ajaxUrl :: forall e. String -> ObservableT (Eff e) Response
+ajaxUrl :: String -> ObservableT Effect Response
 ajaxUrl url =
   ObservableT (ajax_ url)
 
-ajax :: forall e. Request -> ObservableT (Eff e) Response
+ajax :: Request -> ObservableT Effect Response
 ajax req =
   ObservableT (ajaxWithBody_ req)
 
@@ -422,8 +422,8 @@ fromArray :: forall a f. Applicative f => Array a -> ObservableT f a
 fromArray arr = ObservableT (pure (fromArray_ arr))
 
 -- | Creates an ObservableImpl that emits events of the specified type coming from the given event target.
-fromEvent :: forall e. EventTarget -> EventType -> ObservableT (Eff (dom :: DOM | e) ) Event
-fromEvent target (EventType str) = ObservableT $ runEffFn2 fromEventImpl_ target str
+fromEvent :: EventTarget -> EventType -> ObservableT Effect Event
+fromEvent target (EventType str) = ObservableT $ runEffectFn2 fromEventImpl_ target str
 
 -- | Returns an ObservableImpl that emits an infinite sequence of ascending
 -- | integers, with a constant interval of time of your choosing between those
@@ -446,7 +446,7 @@ timer :: forall f. Applicative f => Int -> Int -> ObservableT f Int
 timer dly period = ObservableT (pure (runFn2 timerImpl_ dly period))
 
 
-create :: forall a e u. (Subscriber a -> Eff e u) -> ObservableT (Eff e) a
+create :: forall a u. (Subscriber a -> Effect u) -> ObservableT Effect a
 create fn = ObservableT (create_ fn)
 
 -- | Collects values from the first Observable into an Array, and emits that array only when
@@ -718,19 +718,19 @@ subscribeOn :: forall a f. Functor f => Scheduler -> ObservableT f a -> Observab
 subscribeOn scheduler = mapInner (subscribeOn_ scheduler)
 
 -- Subscribe to an ObservableImpl, supplying only the `next` function.
-subscribeNext :: forall a f e u. Functor f => (a -> Eff e u) -> ObservableT f a -> f (Eff e Subscription)
+subscribeNext :: forall a f u. Functor f => (a -> Effect u) -> ObservableT f a -> f (Effect Subscription)
 subscribeNext next (ObservableT fo) = map (subscribeNext_ next) fo
 
---foreign import subscribeNext_' :: forall a e u. (a -> Eff e u) -> ObservableImpl a -> Eff e Subscription
+--foreign import subscribeNext_' :: forall a e u. (a -> Effect u) -> ObservableImpl a -> Effect Subscription
 
-create' :: forall a e u. (Subscriber a -> Eff e u) -> ObservableT (Eff e) a
+create' :: forall a u. (Subscriber a -> Effect u) -> ObservableT Effect a
 create' fn = ObservableT (create_ fn)
 
 --foreign import bind' :: forall m a b. Monad m => m a -> (a -> m b) -> m b
 --foreign import join' :: forall m a. Monad m => m (m a) -> m a
 
--- create -> Eff e (Observable a)
--- subscribeToOuter -> m (Eff e Subscription)
+-- create -> Effect (Observable a)
+-- subscribeToOuter -> m (Effect Subscription)
 -- inner :: a
 
 
@@ -742,14 +742,14 @@ join_ outer = create(\observer ->
   pure (outer # subscribeNext (\monadOfInner ->
     pure (monadOfInner # subscribeNext(\value ->
       observer.next value
-    ) # map unsafePerformEff)
-  ) # map unsafePerformEff)
-) # runObservableT # unsafePerformEff # pure # ObservableT
+    ) # map unsafePerformEffect)
+  ) # map unsafePerformEffect)
+) # runObservableT # unsafePerformEffect # pure # ObservableT
 
 
 -- | Subscribing to an ObservableImpl is like calling a function, providing
 -- | `next`, `error` and `completed` effects to which the data will be delivered.
-subscribe :: forall a f e. Functor f => Subscriber a -> ObservableT f a -> f (Eff e Subscription)
+subscribe :: forall a f. Functor f => Subscriber a -> ObservableT f a -> f (Effect Subscription)
 subscribe subscriber (ObservableT fo) = map (subscribe_ subscriber) fo
 
 -- | Returns an ObservableImpl that reverses the effect of `materialize` by
@@ -779,7 +779,7 @@ unwrapInnerFn fn a = unwrapId (fn a)
 unwrapId :: forall a c. Comonad c => ObservableT c a -> ObservableImpl a
 unwrapId = runObservableT >>> extract
 
-unwrapEff :: forall e a. Observable (Eff e a) -> ObservableT (Eff e) a
+unwrapEff :: forall a. Observable (Effect a) -> ObservableT (Effect) a
 unwrapEff = unwrapId >>> unwrap_ >>> ObservableT
 
 
