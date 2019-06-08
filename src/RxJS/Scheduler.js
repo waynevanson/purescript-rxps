@@ -5,7 +5,7 @@
 
 var Rx = require('rxjs');
 
-exports.queue = Rx.Scheduler.queue;
-exports.asap = Rx.Scheduler.asap;
-exports.async = Rx.Scheduler.async;
-exports.animationFrame = Rx.Scheduler.animationFrame;
+exports.queue = Rx.queueScheduler;
+exports.asap = Rx.asapScheduler;
+exports.async = Rx.asyncScheduler;
+exports.animationFrame = Rx.animationFrameScheduler;

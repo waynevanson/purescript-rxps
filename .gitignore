@@ -7,3 +7,5 @@
 /yarn.lock
 /src/Main.purs
 /npm-debug.log
+/.vscode
+/.spago

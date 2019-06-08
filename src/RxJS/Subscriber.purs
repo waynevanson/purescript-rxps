@@ -3,11 +3,11 @@ module RxJS.Subscriber
         where
 
 import Prelude (Unit)
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Exception (Error)
+import Effect (Effect)
+import Effect.Exception (Error)
 
 type Subscriber a
-  = { next      :: forall e. a -> Eff e Unit
-    , error     :: forall e. Error -> Eff e Unit
-    , completed :: forall e. Unit -> Eff e Unit
+  = { next      :: a -> Effect Unit
+    , error     :: Error -> Effect Unit
+    , completed :: Unit -> Effect Unit
     }
