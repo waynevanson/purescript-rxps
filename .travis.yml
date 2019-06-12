@@ -1,12 +1,12 @@
 language: node_js
 
 node_js:
-  - "6"
+  - "12"
 
 before_script:
-  - npm install -g pulp bower purescript
+  - npm install -g purescript pulp psc-package spago
   - npm install rxjs
-  - bower install
+  - spago build
 
 script:
-  - pulp test
+  - spago test
