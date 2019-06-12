@@ -17,13 +17,13 @@ function removeEff(fn) {
 
 exports.observeOn_ = function (s) {
   return function (obs) {
-    return RxOp.observeOn(obs, s); // obs.observeOn(s);
+    return RxOp.observeOn(obs, s); 
   };
 }
 
 exports.subscribeOn_ = function (s) {
   return function (obs) {
-    return RxOp.subscribeOn(obs, s); // obs.subscribeOn(s);
+    return RxOp.subscribeOn(obs, s); 
   };
 }
 
@@ -55,7 +55,7 @@ exports.subscribeNext_ = function (eff) {
 
 exports.ajax_ = function (req) {
   return function () {
-    return RxAjax.ajax(req).pipe( // Rx.Observable.ajax(req)
+    return RxAjax.ajax(req).pipe( 
       RxOp.map(function (res) {
         var body = res.responseText || JSON.stringify(res.response)
         return { body: body, status: res.status, responseType: res.responseType }
@@ -65,23 +65,23 @@ exports.ajax_ = function (req) {
 
 exports.ajaxWithBody_ = exports.ajax_;
 
-exports._empty_ = Rx.EMPTY; // Rx.Observable.empty();
+exports._empty_ = Rx.EMPTY; 
 
 exports.fromArray_ = Rx.from; //Rx.Observable.from;
 
-exports.fromEventImpl_ = Rx.fromEvent; // Rx.Observable.fromEvent;
+exports.fromEventImpl_ = Rx.fromEvent; 
 
-exports.interval_ = Rx.interval; // Rx.Observable.interval;
+exports.interval_ = Rx.interval; 
 
-exports.just_ = Rx.of; // Rx.Observable.of;
+exports.just_ = Rx.of; 
 
-exports.never_ = Rx.NEVER; // Rx.Observable.never();
+exports.never_ = Rx.NEVER; 
 
-exports.rangeImpl_ = Rx.range; // Rx.Observable.range;
+exports.rangeImpl_ = Rx.range; 
 
-exports.throw_ = Rx.throw; // Rx.Observable.throw;
+exports.throw_ = Rx.throw; 
 
-exports.timerImpl_ = Rx.timer; // Rx.Observable.timer;
+exports.timerImpl_ = Rx.timer; 
 
 /**** Transformation Operators ****/
 

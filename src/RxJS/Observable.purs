@@ -101,7 +101,6 @@ import Control.Monad.Error.Class (class MonadThrow, class MonadError)
 import Control.MonadPlus (class MonadPlus)
 import Control.MonadZero (class MonadZero)
 import Control.Plus (class Plus)
--- import Web.DOM (DOM)
 import Web.Event.Event (Event, EventType(..))
 import Web.Event.EventTarget (EventTarget)
 import Data.Array.Partial (head, last) as Array
