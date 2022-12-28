@@ -3,9 +3,9 @@
 
 // module RxJS.Scheduler
 
-var Rx = require('rxjs');
+import Rx from 'rxjs';
 
-exports.queue = Rx.queueScheduler;
-exports.asap = Rx.asapScheduler;
-exports.async = Rx.asyncScheduler;
-exports.animationFrame = Rx.animationFrameScheduler;
+export const queue = Rx.queueScheduler;
+export const asap = Rx.asapScheduler;
+export const async = Rx.asyncScheduler;
+export const animationFrame = Rx.animationFrameScheduler;

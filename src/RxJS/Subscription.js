@@ -3,10 +3,10 @@
 
 // module RxJS.Subscription
 
-var Rx = require('rxjs');
+import Rx from 'rxjs';
 
-exports.unsubscribe = function(sub){
+export const unsubscribe = function(sub){
   return function(){
     sub.unsubscribe();
   };
-}
+};

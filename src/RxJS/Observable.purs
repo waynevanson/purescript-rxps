@@ -99,7 +99,6 @@ import Effect.Exception (Error)
 import Effect.Unsafe (unsafePerformEffect)
 import Control.Monad.Error.Class (class MonadThrow, class MonadError)
 import Control.MonadPlus (class MonadPlus)
-import Control.MonadZero (class MonadZero)
 import Control.Plus (class Plus)
 import Web.Event.Event (Event, EventType(..))
 import Web.Event.EventTarget (EventTarget)
@@ -146,8 +145,6 @@ instance plusObservableImpl :: Plus ObservableImpl where
   empty = _empty_
 
 instance alternativeObservableImpl :: Alternative ObservableImpl
-
-instance monadZeroObservableImpl :: MonadZero ObservableImpl
 
 instance monadPlusObservableImpl :: MonadPlus ObservableImpl
 
@@ -332,8 +329,6 @@ instance bindObservableT :: Monad m => Bind (ObservableT m) where
 instance monadObservableT :: Monad m => Monad (ObservableT m)
 
 instance alternativeObservableT :: Monad m => Alternative (ObservableT m)
-
-instance monadZeroObservableT :: Monad m => MonadZero (ObservableT m)
 
 instance monadPlusObservableT :: Monad m => MonadPlus (ObservableT m)
 
