@@ -2,10 +2,10 @@
 "use strict";
 
 // module RxJS.Observable
-import Rx from 'rxjs';
+import * as Rx from 'rxjs';
 
-import RxOp from 'rxjs/operators';
-import RxAjax from 'rxjs/ajax';
+import * as RxOp from 'rxjs/operators';
+import * as RxAjax from 'rxjs/ajax';
 
 
 function removeEff(fn) {

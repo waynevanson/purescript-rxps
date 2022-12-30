@@ -3,7 +3,7 @@
 
 // module RxJS.Scheduler
 
-import Rx from 'rxjs';
+import * as Rx from 'rxjs';
 
 export const queue = Rx.queueScheduler;
 export const asap = Rx.asapScheduler;
