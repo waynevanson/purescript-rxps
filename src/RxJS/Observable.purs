@@ -19,6 +19,7 @@ module RxJS.Observable
   , buffer
   , bufferCount
   , bufferTime
+  , liftF
   , bufferWhen
   , concatMap
   , exhaustMap
@@ -43,6 +44,7 @@ module RxJS.Observable
   , debounce
   , debounceTime
   , distinct
+  , fromObservable
   , distinctUntilChanged
   , elementAt
   , filter
@@ -75,6 +77,8 @@ module RxJS.Observable
   , zip
   , catch
   , retry
+  , requestWithBody
+  , bufferToggle
   , defaultIfEmpty
   , delay
   , delayWhen
@@ -717,9 +721,6 @@ subscribeNext :: forall a f u. Functor f => (a -> Effect u) -> ObservableT f a -
 subscribeNext next (ObservableT fo) = map (subscribeNext_ next) fo
 
 --foreign import subscribeNext_' :: forall a e u. (a -> Effect u) -> ObservableImpl a -> Effect Subscription
-
-create' :: forall a u. (Subscriber a -> Effect u) -> ObservableT (Effect) a
-create' fn = ObservableT (create_ fn)
 
 --foreign import bind' :: forall m a b. Monad m => m a -> (a -> m b) -> m b
 --foreign import join' :: forall m a. Monad m => m (m a) -> m a

@@ -1,0 +1,22 @@
+package:
+  dependencies:
+    - arrays
+    - control
+    - effect
+    - exceptions
+    - foldable-traversable
+    - foreign-object
+    - functions
+    - identity
+    - partial
+    - prelude
+    - strings
+    - test-unit
+    - transformers
+    - tuples
+    - web-events
+  name: my-project
+workspace:
+  extra_packages: {}
+  package_set:
+    registry: 42.4.0
