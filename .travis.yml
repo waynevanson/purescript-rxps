@@ -1,10 +1,10 @@
 language: node_js
 
 node_js:
-  - "12"
+  - "18"
 
 before_script:
-  - npm install -g purescript pulp psc-package spago
+  - npm install -g purescript spago@next
   - npm install rxjs
   - spago build
 

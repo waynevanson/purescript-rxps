@@ -6,7 +6,7 @@ import Effect (Effect)
 import Effect.Class (liftEffect)
 import Control.MonadPlus (empty)
 import Data.String (length)
-import Prelude (Unit, bind, const, map, pure, unit, (#), (<), (>), discard)
+import Prelude (Unit, const, discard, map, pure, unit, void, (#), ($), (<), (>))
 import Test.Unit (TestSuite, suite, test)
 
 observableCreationSpec :: TestSuite
@@ -35,7 +35,7 @@ observableOperatorSpec =
     test "bufferCount" do
       liftEffect ((bufferCount 2 1 observable) # subObservable)
     test "combineLatest" do
-      liftEffect ((combineLatest (\acc cur -> acc) observable observable2) # subObservable)
+      liftEffect ((combineLatest (\acc _ -> acc) observable observable2) # subObservable)
     test "concat" do
       liftEffect ((concat observable observable3) # subObservable)
     test "concatAll" do
@@ -45,7 +45,7 @@ observableOperatorSpec =
     test "count" do
       liftEffect ((count observable) # subObservable)
     test "debounce" do
-      liftEffect ((debounce (\x -> observable) observable3) # subObservable)
+      liftEffect ((debounce (\_ -> observable) observable3) # subObservable)
     test "debounceTime" do
       liftEffect ((debounceTime 1000 observable) # subObservable)
     test "defaultIfEmpty" do
@@ -53,7 +53,7 @@ observableOperatorSpec =
     test "delay" do
       liftEffect ((delay 200 observable) # subObservable)
     test "delayWhen" do
-      liftEffect ((delayWhen (\x -> observable2) observable) # subObservable)
+      liftEffect ((delayWhen (\_ -> observable2) observable) # subObservable)
     test "distinct" do
       liftEffect ((distinct observable) # subObservable)
     test "distinctUntilChanged" do
@@ -61,7 +61,7 @@ observableOperatorSpec =
     test "exhaust" do
       liftEffect ((exhaust higherOrder) # subObservable)
     test "exhaustMap" do
-      liftEffect ((exhaustMap (\x -> observable3) observable) # subObservable)
+      liftEffect ((exhaustMap (\_ -> observable3) observable) # subObservable)
     test "elementAt" do
       liftEffect ((elementAt 2 observable) # subObservable)
     test "every" do
@@ -87,15 +87,15 @@ observableOperatorSpec =
     test "mergeAll" do
       liftEffect ((mergeAll higherOrder) # subObservable)
     test "mergeMap" do
-      liftEffect ((mergeMap observable (\a -> observable3)) # subObservable)
+      liftEffect ((mergeMap observable (\_ -> observable3)) # subObservable)
     test "mergeMapTo" do
       liftEffect ((mergeMapTo observable observable3) # subObservable)
     test "race" do
       liftEffect ((race [observable, observable3]) # subObservable)
     test "reduce" do
-      liftEffect ((reduce (\acc cur -> acc) 0 observable) # subObservable)
+      liftEffect ((reduce (\acc _ -> acc) 0 observable) # subObservable)
     test "scan" do
-      liftEffect ((scan (\acc cur -> acc) 0 observable) # subObservable)
+      liftEffect ((scan (\acc _ -> acc) 0 observable) # subObservable)
     test "retry" do
       liftEffect ((retry 10 observable) # subObservable)
     test "sample" do
@@ -113,7 +113,7 @@ observableOperatorSpec =
     test "startWith" do
       liftEffect ((startWith 0 observable) # subObservable)
     test "switchMap" do
-      liftEffect ((switchMap (\x -> observable2) observable) # subObservable)
+      liftEffect ((switchMap (\_ -> observable2) observable) # subObservable)
     test "switchMapTo" do
       liftEffect ((switchMapTo observable2 observable) # subObservable)
     test "take" do
@@ -123,7 +123,7 @@ observableOperatorSpec =
     test "takeUntil" do
       liftEffect ((takeUntil observable observable3) # subObservable)
     test "throttle" do
-      liftEffect ((throttle (\x -> observable3) observable) # subObservable)
+      liftEffect ((throttle (\_ -> observable3) observable) # subObservable)
     test "throttleTime" do
       liftEffect ((throttleTime 200 observable) # subObservable)
     test "window" do
@@ -133,7 +133,7 @@ observableOperatorSpec =
     test "windowTime" do
       liftEffect ((windowTime 100 100 observable) # subObservable)
     test "withLatestFrom" do
-      liftEffect ((withLatestFrom (\a b -> a) observable observable2) # subObservable)
+      liftEffect ((withLatestFrom (\a _ -> a) observable observable2) # subObservable)
     test "zip" do
       liftEffect ((zip [observable, observable3]) # subObservable)
 
@@ -150,9 +150,7 @@ higherOrder :: Observable (Observable String)
 higherOrder = just observable2
 
 subObservable :: forall a. Observable a -> Effect Unit
-subObservable obs = do
-    sub <- extract (obs # subscribeNext noop)
-    pure unit
+subObservable obs = void $ extract (obs # subscribeNext noop)
 
 noop :: forall a. a -> Effect Unit
-noop a = pure unit
+noop _ = pure unit

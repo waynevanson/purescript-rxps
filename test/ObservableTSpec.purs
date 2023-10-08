@@ -8,7 +8,7 @@ import Effect.Class (liftEffect)
 import Control.MonadPlus (empty)
 import Data.String (length)
 import Data.Identity (Identity)
-import Prelude (Unit, bind, const, map, pure, unit, (#), (<), (>), discard)
+import Prelude (Unit, const, discard, map, pure, unit, void, (#), ($), (<), (>))
 import Test.Unit (TestSuite, suite, test)
 
 
@@ -40,7 +40,7 @@ observableTOperatorSpec =
     test "bufferCount" do
       liftEffect ((bufferCount 2 1 observable) # subObservable)
     test "combineLatest" do
-      liftEffect ((combineLatest (\acc cur -> acc) observable observable2) # subObservable)
+      liftEffect ((combineLatest (\acc _ -> acc) observable observable2) # subObservable)
     test "concat" do
       liftEffect ((concat observable observable3) # subObservable)
     test "count" do
@@ -80,9 +80,9 @@ observableTOperatorSpec =
     --test "mergeMap" do
       --liftEffect ((mergeMap observable (\a -> observable3)) # subObservable)
     test "reduce" do
-      liftEffect ((reduce (\acc cur -> acc) 0 observable) # subObservable)
+      liftEffect ((reduce (\acc _ -> acc) 0 observable) # subObservable)
     test "scan" do
-      liftEffect ((scan (\acc cur -> acc) 0 observable) # subObservable)
+      liftEffect ((scan (\acc _ -> acc) 0 observable) # subObservable)
     test "retry" do
       liftEffect ((retry 10 observable) # subObservable)
     test "sample" do
@@ -108,7 +108,7 @@ observableTOperatorSpec =
     test "throttleTime" do
       liftEffect ((throttleTime 200 observable) # subObservable)
     test "withLatestFrom" do
-      liftEffect ((withLatestFrom (\a b -> a) observable observable2) # subObservable)
+      liftEffect ((withLatestFrom (\a _ -> a) observable observable2) # subObservable)
 
 
 observable :: ObservableT Identity Int
@@ -120,18 +120,11 @@ observable2 = fromArray ["h","e","ll","o"]
 observable3 :: ObservableT Identity Int
 observable3 = fromArray [6,5,4,3,2,1]
 
-higherOrder :: ObservableT Identity (ObservableT Identity String)
-higherOrder = just observable2
-
 subCreation :: forall a. ObservableT Effect a -> Effect Unit
-subCreation obs = do
-  sub <- join (obs # subscribeNext noop)
-  pure unit
+subCreation obs = void $ join (obs # subscribeNext noop)
 
 subObservable :: forall a. ObservableT Identity a -> Effect Unit
-subObservable obs = do
-    sub <- extract (obs # subscribeNext noop)
-    pure unit
+subObservable obs = void $ extract (obs # subscribeNext noop)
 
 noop :: forall a. a -> Effect Unit
-noop a = pure unit
+noop _ = pure unit
